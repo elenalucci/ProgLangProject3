@@ -16,6 +16,8 @@ class fsa:
     currState = 0;
     legalEndStates = []
     isLegal = True
+    circleList = []
+
 
     def __init__(self,fsaFile,testFile):
         self.fsaFile = fsaFile
@@ -48,7 +50,7 @@ class fsa:
         self.setVars()
 
     def setVars(self):
-        self.totalStates = self.tokens[0]
+        self.totalStates = int(self.tokens[0])
         #print(self.totalStates)
         self.legalVars = self.tokens[1].split(',')
         #print(self.legalVars)
@@ -100,12 +102,20 @@ class fsa:
     def printGUI(self):
         root = tk.Tk()
 
-        canvas = tk.Canvas(root, width=700, height=700,borderwidth=0,highlightthickness=0, bg="white")
+        canvas = tk.Canvas(root, width=500, height=600,borderwidth=0,highlightthickness=0, bg="white")
         
-        canvas.create_line(40, 75, 40, 200, width =2, arrow=tk.LAST)
-        coord = 10,200, 70, 260
+        #canvas.create_line(40, 75, 40, 200, width =2, arrow=tk.LAST)
+        #coord = 10,200, 70, 260
+        i = 0
+        x0,y0,x1,y1 = 210,50,270,110
+        while i < self.totalStates:
+            cir = canvas.create_oval(x0,y0,x1,y1, fill="white")
+            canvas.create_text((x1 - 30),(y1 - 30),text = i)
+            self.circleList.append(cir)
+            y0 += 100
+            y1 += 100
+            i += 1
 
-        cir = canvas.create_oval(260,300,320,360, fill="white")
         canvas.create_text(50,145,text='a')
         canvas.pack()
 
