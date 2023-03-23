@@ -100,16 +100,16 @@ class fsa:
     def printGUI(self):
         root = tk.Tk()
 
-        canvas = tk.Canvas(root, width=300, height=500,borderwidth=0,highlightthickness=0, bg="white")
+        canvas = tk.Canvas(root, width=700, height=700,borderwidth=0,highlightthickness=0, bg="white")
         
         canvas.create_line(40, 75, 40, 200, width =2, arrow=tk.LAST)
         coord = 10,200, 70, 260
 
-        cir = canvas.create_oval(10,50,70,110, fill="red")
+        cir = canvas.create_oval(260,300,320,360, fill="white")
         canvas.create_text(50,145,text='a')
         canvas.pack()
 
-        root.wm_title("Circles, lines, and Arcs")
+        root.wm_title("FSA")
 
         root.mainloop()
 
