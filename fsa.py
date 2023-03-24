@@ -108,15 +108,64 @@ class fsa:
         #coord = 10,200, 70, 260
         i = 0
         x0,y0,x1,y1 = 210,50,270,110
+        tempList = [x0,y0,x1,y1]
+        self.circleList.append(tempList)
         while i < self.totalStates:
-            cir = canvas.create_oval(x0,y0,x1,y1, fill="white")
+            cir = canvas.create_oval(x0,y0,x1,y1, fill="grey")
             canvas.create_text((x1 - 30),(y1 - 30),text = i)
-            self.circleList.append(cir)
+            
             y0 += 100
             y1 += 100
+            newList = tempList.copy()
+            newList[1] = y0
+            newList[3] = y1
+            self.circleList.append(newList)
             i += 1
+        
+        self.circleList.pop()
+        
+        for x in self.legalEndStates:
+            #print(self.circleList[int(x)][0])
+            x0 = self.circleList[int(x)][0] -5
+            y0 = self.circleList[int(x)][1] -5
+            x1 = self.circleList[int(x)][2] +5
+            y1 = self.circleList[int(x)][3] +5
 
-        canvas.create_text(50,145,text='a')
+            bigCir = canvas.create_oval(x0,y0,x1,y1)  
+    
+        for x in self.legalMoves:
+            temp = x.replace(")","")
+            temp = temp.replace("(","")
+            tempSplit = temp.split(':')
+            
+            if(tempSplit[0] == tempSplit[1]):
+                x0 = self.circleList[int(tempSplit[0])][0] + 25
+                y0 = self.circleList[int(tempSplit[0])][1] 
+                x1 = self.circleList[int(tempSplit[0])][2] + 25
+                y1 = self.circleList[int(tempSplit[0])][3] 
+
+                halfCir = canvas.create_oval(x0,y0,x1,y1, outline="grey",width = 1)
+                canvas.create_line(x0+15, y0, x1-30, y1-55, width =2)
+                canvas.create_line(x0+15, y0, x1-30, y1-65, width =2)
+                canvas.create_text((x1 +8),(y1 -30),text =tempSplit[2])
+            elif(((int(tempSplit[1]))-int(tempSplit[0])) == 1):
+                x0 = self.circleList[int(tempSplit[0])][0] + 30
+                y0 = self.circleList[int(tempSplit[0])][1] + 60
+                x1 = self.circleList[int(tempSplit[0])][2] - 30
+                y1 = self.circleList[int(tempSplit[0])][3] + 40
+                canvas.create_line(x0, y0, x1, y1, width =2, arrow=tk.LAST)
+                canvas.create_text((x1 +8),(y1 -25),text =tempSplit[2])
+            elif(((int(tempSplit[1]))<int(tempSplit[0]))):
+                x0 = self.circleList[int(tempSplit[0])][0] - 55
+                y0 = self.circleList[int(tempSplit[0])][1] + 35
+                x1 = self.circleList[int(tempSplit[1])][2]
+                y1 = self.circleList[int(tempSplit[1])][3] - 35
+                
+                arc = canvas.create_arc(x0,y0,x1,y1,start = 90,width = 2,extent = 180, style = "arc",)
+                canvas.create_line(x0+45, y0-300, x1-60, y1, width =2)
+                canvas.create_line(x0+45, y0-320, x1-60, y1, width =2)
+                canvas.create_text((x1 -130),(y1 +150),text =tempSplit[2])
+        #print(self.circleList)
         canvas.pack()
 
         root.wm_title("FSA")
@@ -127,8 +176,8 @@ class fsa:
 
     def start(self):
         self.readFiles()
-        self.printGUI()
         self.testStringVar()
+        self.printGUI()
         print("success processing " + self.testString)
         #print("START")
 
